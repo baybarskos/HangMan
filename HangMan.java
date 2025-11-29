@@ -102,6 +102,7 @@ String cencorWord=wordCencor(ranWord);
 System.out.println(cencorWord);
 while(!found&&gameContinue){
 	System.out.println("Make a guess");
+	System.out.println("if you want to guess space write '.'");
 	char guess=input.next().toLowerCase().charAt(0);
 	cencorWord=revealChar(guess,ranWord,cencorWord);
 	if(!cencorWord.contains("-")){
