@@ -6,6 +6,30 @@ import java.io.FileNotFoundException;
 public class HangMan{
 static int falseEntry=0;
 static boolean gameContinue=true;
+static boolean replay=true;
+static boolean found=false;
+static String originalWord;
+static char guess;
+static String fileN;
+public static void guessedWord(String guess){
+	if(guess.equals(originalWord)){
+	found=true;}
+	else{System.out.println("Wrong guess!");}}
+public static String selectFile(Scanner input){
+System.out.println("Select a topic to play");
+System.out.println("1-countrys, 2-oscar winners(films and men winners),3-old school rappers");
+int select=input.nextInt();
+input.nextLine();
+switch(select){
+	case 1:
+	return "words.txt";
+	case 2:
+	return "films.txt";
+	case 3:
+	return "rappers.txt";
+	}
+	return "a";
+	}
 public static String wordCencor(String word){
 String CenWord="";
 	for(int i=0;i<word.length();i++){
@@ -13,7 +37,7 @@ String CenWord="";
 	return CenWord;}
 public static String revealChar(char c,String word,String cencor){
 String cha=c+"";
-String originalWord=word;
+originalWord=word;
 	if(word.contains(cha)){
 	while(word.contains(cha)){
 		cencor=cencor.substring(0,word.indexOf(c))+c+cencor.substring(word.indexOf(c)+1);
@@ -24,13 +48,13 @@ String originalWord=word;
 	System.out.println("no chars as guessed");
 	System.out.println(cencor);
 	falseEntry++;
-	if(falseEntry==5){
+	if(falseEntry==7){
 	System.out.println("You have lost!");
 	System.out.println(originalWord);
 	hangManDrawings();
 	gameContinue=false;}
 	else{
-	System.out.println("You guessed wrong"+falseEntry+"/5");
+	System.out.println("You guessed wrong"+falseEntry+"/7");
 	hangManDrawings();}
 		return cencor;}
 		}
@@ -90,22 +114,50 @@ public static void hangManDrawings(){
 		System.out.println(" \\|/");
 		System.out.println("  |");
 		System.out.println("./ \\.");
-		break;}}
+		break;
+		case 6:
+		System.out.println(" ___");
+		System.out.println("  |");
+		System.out.println("  O");
+		System.out.println("   \\");
+		System.out.println("  \\|/");
+		System.out.println("   |");
+		System.out.println(" ./ \\.");
+		break;
+		case 7:
+		System.out.println(" ___");
+		System.out.println("  |");
+		System.out.println("  O");
+		System.out.println("  .");
+		System.out.println(" \\|/");
+		System.out.println("  |");
+		System.out.println("./ \\.");
+		break;
+		}}
 public static void main(String[] args){
-String[] words=createWord("words.txt");
+while(replay){
+found=false;
 Random ran=new Random();
 Scanner input=new Scanner(System.in);
-boolean found=false;
-
+fileN=selectFile(input);
+String[] words=createWord(fileN);
 String ranWord=words[ran.nextInt(words.length)];
 String cencorWord=wordCencor(ranWord);
 System.out.println(cencorWord);
 while(!found&&gameContinue){
 	System.out.println("Make a guess");
-	System.out.println("if you want to guess space write '.'");
-	char guess=input.next().toLowerCase().charAt(0);
+	System.out.println("if you want to guess space write '0'");
+	String guessAll=input.nextLine().toLowerCase();
+	if(guessAll.length()==1){
+		guess=guessAll.charAt(0);}
+	else{
+	guessedWord(guessAll);}
 	cencorWord=revealChar(guess,ranWord,cencorWord);
 	if(!cencorWord.contains("-")){
 		found=true;
 		System.out.println("Found!");}}
-}}
+System.out.println("If you want to exit press x");
+if(input.next().equalsIgnoreCase("x")) replay=false;
+else{replay=true; falseEntry=0; gameContinue=true; found=false;}}
+}
+}
